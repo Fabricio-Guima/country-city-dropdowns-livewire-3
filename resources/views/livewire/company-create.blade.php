@@ -10,22 +10,28 @@
     <form wire:submit="save">
         <div class="mb-4">
             <label for="name" class="block text-gray-700">Company name</label>
-            <input wire:model="name" type="text" required id="name"
+            <input wire:model="form.name" type="text" required id="name"
                 class="w-full p-2 mt-1 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            @error('form.name')
+                <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div class="mb-4">
             <label for="country" class="block text-gray-700">Country</label>
-            <select wire:model.live="country" required id="country"
+            <select wire:model.live="form.country" id="country"
                 class="w-full p-2 mt-1 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">-- choose country --</option>
                 @foreach ($countries as $country)
                     <option value="{{ $country->id }}">{{ $country->name }}</option>
                 @endforeach
             </select>
+            @error('form.country')
+                <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div class="mb-4">
             <label for="city" class="block text-gray-700">City</label>
-            <select wire:model="city" required id="city"
+            <select wire:model="form.city" id="city"
                 class="w-full p-2 mt-1 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 @forelse($cities as $city)
                     <option value="{{ $city->id }}">{{ $city->name }}</option>
@@ -33,6 +39,9 @@
                     <option value="">-- choose country first --</option>
                 @endforelse
             </select>
+            @error('form.city')
+                <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <button type="submit" class="w-full p-2 text-white bg-blue-500 rounded hover:bg-blue-600">Submit</button>
     </form>
