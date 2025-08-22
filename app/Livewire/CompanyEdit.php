@@ -40,9 +40,10 @@ class CompanyEdit extends Component
 
     public function updated($property)
     {
-        if ($property == 'country') {
-            $cities = City::where('country_id', $this->country)->get();
-            $this->city = $cities->first()?->id;
+        if ($property === 'country') {
+            $this->cities = City::where('country_id', $this->country)->get();
+
+            $this->city = $this->cities->first()?->id ?? '';
         }
     }
 
