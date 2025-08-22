@@ -2,17 +2,21 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Forms\CompanyForm;
 use App\Models\City;
 use App\Models\Company;
 use App\Models\Country;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
+#[Title('Create Company')]
+#[Layout('layouts.app')]
 class CompanyCreate extends Component
 {
+    public CompanyForm $form;
     public $countries;
-    public $name;
-    public $country;
-    public $city;
     public $cities = [];
     public $savedName = '';
 
@@ -20,6 +24,7 @@ class CompanyCreate extends Component
     {
         $this->countries = Country::all();
     }
+    #[Layout('layouts.app')]
     public function render()
     {
         return view('livewire.company-create');
@@ -27,24 +32,26 @@ class CompanyCreate extends Component
 
     public function updated($property)
     {
-        if ($property == 'country') {
-            $cities = City::where('country_id', $this->country)->get();
+        if ($property == 'form.country') {
+            $cities = City::where('country_id', $this->form->country)->get();
             $this->cities = $cities;
-            $this->city = $cities->first()?->id;
+            $this->form->city = $cities->first()?->id;
         }
 
     }
 
     public function save(): void
     {
+        $this->validate();
+
         Company::create([
-            'name' => $this->name,
-            'country_id' => $this->country,
-            'city_id' => $this->city,
+            'name'       => $this->form->name,
+            'country_id' => $this->form->country,
+            'city_id'    => $this->form->city,
         ]);
 
-        $this->savedName = $this->name;
+        $this->savedName = $this->form->name;
 
-        $this->reset('name', 'country', 'city', 'cities');
+        $this->reset('form', 'cities');
     }
 }
