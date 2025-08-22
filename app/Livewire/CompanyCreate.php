@@ -3,14 +3,18 @@
 namespace App\Livewire;
 
 use App\Models\City;
+use App\Models\Company;
 use App\Models\Country;
 use Livewire\Component;
 
 class CompanyCreate extends Component
 {
     public $countries;
+    public $name;
     public $country;
+    public $city;
     public $cities = [];
+    public $savedName = '';
 
     public function mount()
     {
@@ -24,7 +28,23 @@ class CompanyCreate extends Component
     public function updated($property)
     {
         if ($property == 'country') {
-            $this->cities = City::where('country_id', $this->country)->get();
+            $cities = City::where('country_id', $this->country)->get();
+            $this->cities = $cities;
+            $this->city = $cities->first()?->id;
         }
+
+    }
+
+    public function save(): void
+    {
+        Company::create([
+            'name' => $this->name,
+            'country_id' => $this->country,
+            'city_id' => $this->city,
+        ]);
+
+        $this->savedName = $this->name;
+
+        $this->reset('name', 'country', 'city', 'cities');
     }
 }
