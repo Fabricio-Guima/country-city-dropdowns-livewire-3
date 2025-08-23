@@ -77,3 +77,5 @@ Go to /companies/create to create a company.
 Go to /companies/{companyId}/edit to edit a company.
 
 Select a Country → the City dropdown updates automatically.
+
+![Screenshot](public/screenshots/screenshot-01.png)
